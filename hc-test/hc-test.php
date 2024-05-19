@@ -24,16 +24,25 @@ class hcsem_change_font_style {
         //创建菜单
         add_action( 'admin_menu', array( $this, 'hc_create_menu' ) );
         add_action( 'admin_init', array( $this, 'register_hc_test_setting' ) );
+
         add_action( 'wp_head',  array( $this,  'hc_test_head_fun' ) );
 
-        //使用ajax校验信息
-        wp_enqueue_script( 'hc_test', plugins_url('js/hc_test.js', __FILE__), array('jquery') );
-        wp_localize_script( 'hc_test', 'ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'load_script' ) );
 
         add_action( 'wp_ajax_color_check_action' , array( $this, 'color_check_action_fun') );
         add_action( 'wp_ajax_nopriv_hcsem_description' , array( $this, 'hcsem_description_fun') );
 
         add_action( 'init', array( $this, 'hcsem_load_textdomain' ) );
+    }
+
+    function load_script() {
+
+        //使用ajax校验信息
+        $screen = get_current_screen();
+        if ( is_object( $screen ) && $screen->id == 'hc_test' ) {
+            wp_enqueue_script( 'hc_test', plugins_url('js/hc_test.js', __FILE__), array('jquery') );
+            wp_localize_script( 'hc_test', 'ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+        }
     }
 
     function hcsem_load_textdomain() {
@@ -57,7 +66,7 @@ class hcsem_change_font_style {
 
     function hcsem_description_fun() {
 
-        echo "hc的笔记本：" . $_POST['description'];
+        echo "黄聪的笔记本：" . $_POST['description'];
         wp_die();
 
     }
@@ -77,15 +86,18 @@ class hcsem_change_font_style {
             $this->option_group
         );
 
-        //设置字体颜色
-        add_settings_field(
-            'hc_test_color',
-            __( 'color', 'hc-test' ),
-            array( $this, 'hc_test_color_function' ),
-            $this->option_group,
-            $setting_section
-        );
 
+        if( current_user_can('edit_posts') )
+        {
+            //设置字体颜色
+            add_settings_field(
+                'hc_test_color',
+                __( 'color', 'hc-test' ),
+                array( $this, 'hc_test_color_function' ),
+                $this->option_group,
+                $setting_section
+            );
+        }
         //设置字体大小
         add_settings_field(
             'hc_test_size',
@@ -138,9 +150,9 @@ class hcsem_change_font_style {
 
         //创建顶级菜单
         add_menu_page(
-            'hc的插件首页',
-            'hc的插件',
-            'manage_options',
+            '黄聪的插件首页',
+            '黄聪的插件',
+            'read',
             'hc_test' ,
             array( $this, 'hc_settings_page' ),
             plugins_url( $this->icon_url, __FILE__ )
@@ -177,6 +189,7 @@ class hcsem_change_font_style {
 }
 
 new hcsem_change_font_style();
+
 
 
 
