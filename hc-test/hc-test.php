@@ -32,6 +32,21 @@ class hcsem_change_font_style {
 
         add_action( 'wp_ajax_color_check_action' , array( $this, 'color_check_action_fun') );
         add_action( 'wp_ajax_nopriv_hcsem_description' , array( $this, 'hcsem_description_fun') );
+
+        add_action( 'init', array( $this, 'hcsem_load_textdomain' ) );
+    }
+
+    function hcsem_load_textdomain() {
+
+        //加载 languages 目录下的翻译文件 zh_CN
+        $currentLocale = get_locale();
+
+        if( !empty( $currentLocale ) ) {
+
+            $moFile = dirname(__FILE__) . "/languages/{$currentLocale}.mo";
+
+            if( @file_exists( $moFile ) && is_readable( $moFile ) ) load_textdomain( 'hc-test', $moFile );
+        }
     }
 
     function color_check_action_fun(){
@@ -65,7 +80,7 @@ class hcsem_change_font_style {
         //设置字体颜色
         add_settings_field(
             'hc_test_color',
-            '字体颜色',
+            __( 'color', 'hc-test' ),
             array( $this, 'hc_test_color_function' ),
             $this->option_group,
             $setting_section
@@ -74,7 +89,7 @@ class hcsem_change_font_style {
         //设置字体大小
         add_settings_field(
             'hc_test_size',
-            '字体大小',
+            __( 'size', 'hc-test' ),
             array( $this, 'hc_test_size_function' ),
             $this->option_group,
             $setting_section
@@ -83,7 +98,7 @@ class hcsem_change_font_style {
         //设置字体加粗
         add_settings_field(
             'hc_test_bold',
-            '字体加粗',
+            __( 'bold', 'hc-test' ),
             array( $this, 'hc_test_bold_function' ),
             $this->option_group,
             $setting_section
@@ -93,7 +108,7 @@ class hcsem_change_font_style {
     function hc_test_bold_function() {
         $hc_test_option = get_option( "hc_test_option" );
         ?>
-        <input name="hc_test_option[bold]" type="checkbox"  value="1" <? checked( 1, $hc_test_option["bold"] ); ?> /> 加粗
+        <input name="hc_test_option[bold]" type="checkbox"  value="1" <? checked( 1, $hc_test_option["bold"] ); ?> /> <? _e( 'set bold', 'hc-test' ); ?>
         <?
     }
 
@@ -162,6 +177,7 @@ class hcsem_change_font_style {
 }
 
 new hcsem_change_font_style();
+
 
 
 
