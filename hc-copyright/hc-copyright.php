@@ -224,7 +224,7 @@ function hc_enqueue_style() {
 
 //自定义引用脚本文件
 function hc_enqueue_script() {
-    wp_enqueue_script( 'my-js', plugins_url('js/hc_copyrighy.js', __FILE__), false );
+    wp_enqueue_script( 'my-js', plugins_url('js/hc_test.js', __FILE__), false );
 }
 
 //引用文件的钩子
