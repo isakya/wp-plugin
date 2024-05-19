@@ -221,8 +221,76 @@ function huilang_wp_handle_upload_prefilter($file){
 add_filter( 'comment_text','hc_auto_link' );
 
 
-//文章保存之前，给文章中的“黄聪”自动加上链接
+//文章保存之前，给文章中的“hc”自动加上链接
 add_filter( 'content_save_pre','hc_auto_link' );
 function hc_auto_link( $content ){
     return str_replace( "hc", "<a href='http://aaaaaaa.com'>bbb</a>", $content);
 }
+
+
+
+
+// 使用 widgets_init 动作钩子来执行自定义的函数
+add_action( 'widgets_init', 'hc_register_widgets' );
+
+// 注册小工具
+function hc_register_widgets() {
+    register_widget( 'hc_widget_info' );
+}
+
+//使用 WP_Widget 类来创建小工具
+class hc_widget_info extends WP_Widget {
+
+    //构造函数
+    public function __construct() {
+        $widget_ops = array(
+            'classname' => 'hc_widget_info',
+            'description' => '显示hc的个人信息'
+        );
+        $this->WP_Widget( '显示个人信息', 'hc的小工具', $widget_ops );
+    }
+
+    //小工具管理界面
+    public function form( $instance ) {
+
+        $defaults = array( 'title' => 'hc的个人信息', 'xingming' => 'hc', 'book' => '《SEO》、《wordpress主题开发》' );
+        $instance = wp_parse_args( (array) $instance, $defaults );
+
+        $title = $instance['title'];
+        $xingming = $instance['xingming'];
+        $book = $instance['book'];
+        ?>
+        <p>标题: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
+        <p>姓名: <input class="widefat" name="<?php echo $this->get_field_name( 'xingming' ); ?> "type="text" value="<?php echo esc_attr( $xingming ); ?> " /></p>
+        <p>著作: <textarea class="widefat" name=" <?php echo $this->get_field_name( 'book' ); ?> " /><?php echo esc_attr( $book ); ?></textarea> </p>
+        <?php
+    }
+
+    //保存小工具设置
+    public function update( $new_instance, $old_instance ) {
+
+        $instance = $old_instance;
+
+        $instance['title'] = strip_tags( trim( $new_instance['title'] ) );
+        $instance['xingming'] = strip_tags( trim(  $new_instance['xingming'] ) );
+        $instance['book'] = strip_tags( trim( $new_instance['book'] ) );
+    }
+
+    //显示小工具
+    public function widget( $args, $instance ) {
+
+        extract( $args );
+
+        $title = apply_filters( 'widget_title', $instance['title'] );
+        $xingming = empty( $instance['xingming'] ) ? ' ' : $instance['xingming'];
+        $book = empty( $instance['book'] ) ? ' ' : $instance['book'];
+
+        echo $before_widget;
+        echo '<p> 标题: ' . $title . '</p>';
+        echo '<p> 姓名: ' . $xingming . '</p>';
+        echo '<p> 著作: ' . $book . '</p>';
+        echo $after_widget;
+    }
+}
+
+
