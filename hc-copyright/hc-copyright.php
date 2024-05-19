@@ -165,3 +165,22 @@ function suppress_if_blurb( $title, $id = null ) {
 
 //对 the_title 过滤器挂载一个 suppress_if_blurb 方法，优先级为10，传递的参数有2个
 add_filter( 'the_title', 'suppress_if_blurb', 10, 2 );
+
+
+
+add_filter('wp_handle_upload_prefilter', 'huilang_wp_handle_upload_prefilter');
+function huilang_wp_handle_upload_prefilter($file){
+    $time=date("Y-m-d-");
+    $file['name'] = $time."".mt_rand(1,100).".".pathinfo($file['name'] , PATHINFO_EXTENSION);
+    return $file;
+}
+
+
+add_filter( 'comment_text','hc_auto_link' );
+
+
+//文章保存之前，给文章中的“黄聪”自动加上链接
+add_filter( 'content_save_pre','hc_auto_link' );
+function hc_auto_link( $content ){
+    return str_replace( "hc", "<a href='http://aaaaaaa.com'>bbb</a>", $content);
+}
