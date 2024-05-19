@@ -23,3 +23,29 @@ function hc_copyright_deactivation() {
     update_option( "hc_copyright_deactivation", "yes" );
 
 }
+
+
+//为 wp_footer 钩子挂载一个新的动作 hc_copyright_insert
+add_action( "wp_footer", "hc_copyright_insert", 1 );
+
+function hc_copyright_insert(){
+
+    //输出一段字符串
+    echo get_option( "hc_copyright_text" );
+
+}
+
+
+add_action( "wp_footer", "hc_copyright_insert_new", 5 );
+
+function hc_copyright_insert_new() {
+    echo "我也输出一段文字";
+}
+
+add_action( 'save_post', 'save_post_meta', 10, 2 );
+
+function save_post_meta( $post_id, $post ) {
+
+    update_post_meta( $post_id, "save-time", "更新时间：" . date("Y-m-d H:i:s") );
+
+}
