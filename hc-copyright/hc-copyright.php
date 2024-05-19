@@ -6,6 +6,48 @@
 //设置时区为 亚洲/上海
 date_default_timezone_set('Asia/Shanghai');
 
+
+add_action( 'admin_menu', 'hc_create_menu' );
+function hc_create_menu() {
+
+    // 创建顶级菜单
+    add_menu_page(
+        'hc的插件首页',
+        'hc的插件',
+        'manage_options',
+        'hc_copyright' ,
+        'hc_settings_page',
+        plugins_url( '/images/icon.png', __FILE__ )
+    );
+
+    // 创建子菜单
+    add_submenu_page(
+        'hc_copyright',
+        '关于hc的插件',
+        '关于',
+        'manage_options',
+        'hc_copyright_about',
+        'hc_create_submenu_menu'
+    );
+}
+
+function hc_create_submenu_menu() {
+
+    ?>
+    <h2>子菜单</h2>
+    <?
+}
+
+function hc_settings_page() {
+    ?>
+    <h2>插件顶级菜单</h2>
+    <?
+}
+
+
+
+
+
 //定义插件启动时候调用的方法
 register_activation_hook( __FILE__, 'hc_copyright_install');
 
