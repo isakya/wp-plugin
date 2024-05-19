@@ -294,3 +294,88 @@ class hc_widget_info extends WP_Widget {
 }
 
 
+
+
+
+
+
+/**
+ * 添加一个元数据框到 post 和 page 的管理界面中
+ */
+function myplugin_add_meta_box() {
+
+    $screens = array( 'post', 'page' );
+
+    add_meta_box(
+        'myplugin_sectionid',
+        '转载自',
+        'myplugin_meta_box_callback',
+        $screens
+    );
+}
+
+//需要给 add_meta_boxes 钩子，挂载一个自定义的方法
+add_action( 'add_meta_boxes', 'myplugin_add_meta_box' );
+
+/**
+ * 元数据框展示代码
+ */
+function myplugin_meta_box_callback( $post ) {
+
+    // 添加一个验证信息，这个在保存元数据的时候用到
+    wp_nonce_field( 'myplugin_save_meta_box_data', 'myplugin_meta_box_nonce' );
+
+    /*
+     * 输出元数据信息
+     */
+    $value = get_post_meta( $post->ID, '_zzurl', true );
+
+    echo '<label for="myplugin_new_field">';
+    _e( '本文章转载自：' );
+    echo '</label> ';
+    echo '<input type="text" id="_zzurl" name="_zzurl" value="' . esc_attr( $value ) . '" size="25" />';
+}
+
+function myplugin_save_meta_box_data( $post_id ) {
+
+    //验证是否为有效信息
+    if ( ! isset( $_POST['myplugin_meta_box_nonce'] ) ) {
+        return;
+    }
+
+    if ( ! wp_verify_nonce( $_POST['myplugin_meta_box_nonce'], 'myplugin_save_meta_box_data' ) ) {
+        return;
+    }
+
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    // Check the user's permissions.
+    if ( isset( $_POST['post_type'] ) && 'page' == $_POST['post_type'] ) {
+
+        if ( ! current_user_can( 'edit_page', $post_id ) ) {
+            return;
+        }
+
+    } else {
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+    }
+
+    if ( ! isset( $_POST['_zzurl'] ) ) {
+        return;
+    }
+
+    $my_data = sanitize_text_field( $_POST['_zzurl'] );
+
+    update_post_meta( $post_id, '_zzurl', $my_data );
+}
+
+//文章保存的时候，会调用 save_post 钩子，因此我们要借助这个钩子来保存元数据框内的数据
+add_action( 'save_post', 'myplugin_save_meta_box_data' );
+
+
+
