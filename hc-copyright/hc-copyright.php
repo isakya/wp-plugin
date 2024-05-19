@@ -32,15 +32,116 @@ function hc_create_menu() {
 }
 
 function hc_create_submenu_menu() {
-
     ?>
     <h2>子菜单</h2>
+    <h3>子菜单设置页面</h3>
     <?
 }
 
 function hc_settings_page() {
     ?>
-    <h2>插件顶级菜单</h2>
+    <div class="wrap">
+        <h2>插件顶级菜单</h2>
+        <div id="message" class="updated">设置保存成功</div>
+        <div id="message" class="error">保存出现错误</div>
+        <p>
+            <input type="submit" name="Save" value="保存设置" />
+            <input type="submit" name="Save" value="保存设置" class="button" />
+            <input type="submit" name="Save" value="保存设置" class="button button-primary" />
+            <input type="submit" name="Save" value="保存设置" class="button button-secondary" />
+            <input type="submit" name="Save" value="保存设置" class="button button-large" />
+            <input type="submit" name="Save" value="保存设置" class="button button-small" />
+            <input type="submit" name="Save" value="保存设置" class="button button-hero" />
+        </p>
+        <p>
+            <a href="#">搜索</a>
+            <a href="#" class="button">搜索</a>
+            <a href="#" class="button button-primary">搜索</a>
+            <a href="#" class="button button-secondary">搜索</a>
+            <a href="#" class="button button-large">搜索</a>
+            <a href="#" class="button button-small">搜索</a>
+            <a href="#" class="button button-hero">搜索</a>
+        </p>
+
+        <form method="POST" action="">
+            <table class="form-table">
+                <tr valign="top">
+                    <th><label for="xingming">姓名：</label></th>
+                    <td><input id="xingming" name="xingming" /></td>
+                </tr>
+                <tr valign="top">
+                    <th><label for="shenfen">身份：</label></th>
+                    <td>
+                        <select name="shenfen">
+                            <option value="在校">在校</option>
+                            <option value="毕业">毕业</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th><label for="tongyi">同意注册</label></th>
+                    <td><input type="checkbox" name="tongyi" /></td>
+                </tr>
+                <tr valign="top">
+                    <th><label for="xingbie">性别</label></th>
+                    <td>
+                        <input type="radio" name="xingbie" value="男" /> 男
+                        <input type="radio" name="xingbie" value="女" /> 女
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th><label for="beizhu">备注</label></th>
+                    <td><textarea name="beizhu"></textarea></td>
+                </tr>
+                <tr valign="top">
+                    <td>
+                        <input type="submit" name="save" value="保存" class="button-primary" />
+                        <input type="submit" name="reset" value="重置" class="button-secondary" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>黄聪</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>黄聪</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>黄聪</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="tablenav">
+            <div class="tablenav-pages">
+                <span class="displaying-num">第1页，共458页</span>
+                <span class="page-numbers current">1</span>
+                <a href="#" class="page-numbers">2</a>
+                <a href="#" class="page-numbers">3</a>
+                <a href="#" class="page-numbers">4</a>
+                <a href="#" class="next page-numbers">»</a>
+            </div>
+        </div>
+    </div>
     <?
 }
 
