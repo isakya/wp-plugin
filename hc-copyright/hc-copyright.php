@@ -151,3 +151,17 @@ $value = "hello";
 
 add_filter( "the_content", "hc_filter_fun" );
 add_filter( "the_content", "hc_filter_fun_add_time" );
+
+
+
+function suppress_if_blurb( $title, $id = null ) {
+
+    if ( in_category('wpcj', $id ) ) {
+        return '不显示标题';
+    }
+
+    return $title . "...";
+}
+
+//对 the_title 过滤器挂载一个 suppress_if_blurb 方法，优先级为10，传递的参数有2个
+add_filter( 'the_title', 'suppress_if_blurb', 10, 2 );
