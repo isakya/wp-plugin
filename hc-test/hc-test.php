@@ -33,6 +33,38 @@ class hcsem_change_font_style {
         add_action( 'wp_ajax_nopriv_hcsem_description' , array( $this, 'hcsem_description_fun') );
 
         add_action( 'init', array( $this, 'hcsem_load_textdomain' ) );
+
+
+        //添加一个 hcsem 短标签，调用 hcsem_shortcode 方法进行处理
+        add_shortcode( 'hcsem', array( $this, 'hcsem_shortcode' ) );
+        add_shortcode( 'baztag', array( $this, 'baztag_func' ) );
+    }
+
+    function baztag_func( $atts, $content = "" ) {
+
+        return "【{$content}】";
+    }
+
+    function hcsem_shortcode( $atts, $content = "" ) {
+
+        $atts = shortcode_atts( array(
+            'title' => '《SEO的道与术》',
+            'url' => 'http://product.dangdang.com/23709551.html',
+            'img' => 'http://images0.cnblogs.com/blog2015/121863/201505/272034378914366.png'
+        ), $atts, 'hcsem' );
+
+        $output = "<a href='{$atts['url']}' title='{$atts['title']}'>
+					<div class='file-box'>
+						<b>【{$atts['title']}】</b>
+						<div class='clr'></div>
+						<img src='{$atts['img']}' />
+						<div class='clr'></div>
+						<i>{$content}</i>
+						<div class='clr'></div>
+					</div>
+				</a>";
+
+        return $output;
     }
 
     function load_script() {
@@ -66,7 +98,7 @@ class hcsem_change_font_style {
 
     function hcsem_description_fun() {
 
-        echo "黄聪的笔记本：" . $_POST['description'];
+        echo "hc的笔记本：" . $_POST['description'];
         wp_die();
 
     }
@@ -150,8 +182,8 @@ class hcsem_change_font_style {
 
         //创建顶级菜单
         add_menu_page(
-            '黄聪的插件首页',
-            '黄聪的插件',
+            'hc的插件首页',
+            'hc的插件',
             'read',
             'hc_test' ,
             array( $this, 'hc_settings_page' ),
